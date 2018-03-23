@@ -42,7 +42,17 @@
     "skins": ["Reindeer"],
     "notes": [
       { "note": "b", "octave": 3, "syllable": "we" },
-      { "note": "e", "octave": 4, "syllable": "wish" }
+      { "note": "e", "octave": 4, "syllable": "wish" },
+      { "note": "e", "octave": 4, "syllable": "you" },
+      { "note": "gb", "octave": 4, "syllable": "a" },
+      { "note": "e", "octave": 4, "syllable": "mer" },
+      { "note": "eb", "octave": 4, "syllable": "ry" },
+      { "note": "db", "octave": 4, "syllable": "Christ" },
+      { "note": "db", "octave": 4, "syllable": "mas" },
+      { "note": "db", "octave": 4, "syllable": "we" },
+      { "note": "gb", "octave": 4, "syllable": "wish" },
+      { "note": "gb", "octave": 4, "syllable": "you" },
+      { "note": "ab", "octave": 4, "syllable": "a" }
     ]
   }
 ]
