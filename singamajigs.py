@@ -1,6 +1,5 @@
 import json
 import random
-import copy
 
 class _NoteInstance:
     def __init__(self, songIndex, noteIndex, noteObj):
@@ -58,10 +57,6 @@ class _Singamajig:
     def getNote(self, noteNum):
         noteNum = noteNum % len(self.notes)
         return self.notes[noteNum]
-    
-    def __deepcopy__(self, memo): # override this so they never get duplicated
-        memo[id(self)] = self
-        return self
 
 class _ScoreState:
     _globals = _Globals()
@@ -98,15 +93,16 @@ class _Possibility:
     _globals = _Globals()
     # store a reference to the previous possibility instead of duplicating everything?
     
-    states = [] # a list of state dicts: (singamajig, noteIndex)
     cost = 0 # cost of previous possibility plus next possibility
     currentJig = None # the Singamajig that plays the note
     previousPoss = None # so we can reconstruct the score when done
     
+    def __init__(self):
+        self.states = [] # a list of _State objects
+    
     def add(self, jig, noteIndex):
         self.currentJig = len(self.states)
         self.states.append(_State(jig, len(self.states), noteIndex))
-        print(jig.getNote(noteIndex)['pitch'])
         self.cost += self._globals.COSTS['ADD']
     
     def advance(self, jigIndex):
@@ -125,6 +121,20 @@ class _Possibility:
             if nextNote == note:
                 matchingJigs.append(state.singamajigIndex)
         return matchingJigs
+    
+    # I don't understand deepcopy very well so we'll do this manually
+    def copy(self):
+        newPoss = _Possibility()
+        for state in self.states:
+            newPoss.states.append(_State(
+                state.singamajig,
+                state.singamajigIndex,
+                state.noteIndex
+            ))
+        newPoss.cost = self.cost
+        newPoss.currentJig = self.currentJig
+        newPoss.previousPoss = self
+        return newPoss
     
     def getScoreState(self):
         if not self.currentJig == None:
@@ -153,16 +163,17 @@ def singamajigs(melody):
         # catch it now if there are no singamajigs that sing the note
         if not melody_pitch in _globals.songs_by_note:
             return None
+        
         for prevPoss in prevPossibilities:
             nexts = prevPoss.getAdvanceableJigIndexes(melody_pitch)
             for nextJig in nexts:
-                newPoss = copy.deepcopy(prevPoss)
-                newPoss.previousPoss = prevPoss
+                newPoss = prevPoss.copy()
                 newPoss.advance(nextJig)
+                print(id(newPoss.states[nextJig]) == id(prevPoss.states[nextJig]))
                 possibilities.append(newPoss)
+            print("---")
             for noteInstance in _globals.songs_by_note[melody_pitch]:
-                newPoss = copy.deepcopy(prevPoss)
-                newPoss.previousPoss = prevPoss
+                newPoss = prevPoss.copy()
                 jig = allSingamajigs[noteInstance.songIndex]
                 newPoss.add(jig, noteInstance.noteIndex)
                 possibilities.append(newPoss)
