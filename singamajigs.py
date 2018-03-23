@@ -169,9 +169,7 @@ def singamajigs(melody):
             for nextJig in nexts:
                 newPoss = prevPoss.copy()
                 newPoss.advance(nextJig)
-                print(id(newPoss.states[nextJig]) == id(prevPoss.states[nextJig]))
                 possibilities.append(newPoss)
-            print("---")
             for noteInstance in _globals.songs_by_note[melody_pitch]:
                 newPoss = prevPoss.copy()
                 jig = allSingamajigs[noteInstance.songIndex]
@@ -182,7 +180,6 @@ def singamajigs(melody):
         # select the cheapest possibilities before moving on to the next round
         possibilities.sort(key=_globals.sort)
         prevPossibilities = possibilities[:_globals.BEAM_WIDTH]
-        for poss in prevPossibilities: print(poss.cost);
     if(len(prevPossibilities) == 0):
         return None
     

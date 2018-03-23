@@ -52,7 +52,51 @@
       { "pitch": "db", "octave": 4, "syllable": "we" },
       { "pitch": "gb", "octave": 4, "syllable": "wish" },
       { "pitch": "gb", "octave": 4, "syllable": "you" },
-      { "pitch": "ab", "octave": 4, "syllable": "a" }
+      { "pitch": "ab", "octave": 4, "syllable": "a" },
+      { "pitch": "gb", "octave": 4, "syllable": "mer" },
+      { "pitch": "e", "octave": 4, "syllable": "ry" },
+      { "pitch": "eb", "octave": 4, "syllable": "Christ" },
+      { "pitch": "b", "octave": 3, "syllable": "mas" },
+      { "pitch": "b", "octave": 3, "syllable": "we" },
+      { "pitch": "ab", "octave": 4, "syllable": "wish" },
+      { "pitch": "ab", "octave": 4, "syllable": "you" },
+      { "pitch": "a", "octave": 4, "syllable": "a" },
+      { "pitch": "ab", "octave": 4, "syllable": "mer" },
+      { "pitch": "gb", "octave": 4, "syllable": "ry" },
+      { "pitch": "e", "octave": 4, "syllable": "Christ" },
+      { "pitch": "db", "octave": 4, "syllable": "mas" },
+      { "pitch": "b", "octave": 3, "syllable": "and" },
+      { "pitch": "b", "octave": 3, "syllable": "a" },
+      { "pitch": "db", "octave": 4, "syllable": "hap" },
+      { "pitch": "gb", "octave": 4, "syllable": "py" },
+      { "pitch": "eb", "octave": 4, "syllable": "new" },
+      { "pitch": "e", "octave": 4, "syllable": "year" }
+      
+    ]
+  },
+  {
+    "title": "Trick or Treat",
+    "skins": ["Orange Pumpkin", "White Ghost"],
+    "notes": [
+      { "pitch": "db", "octave": 4, "syllable": "trick" },
+      { "pitch": "db", "octave": 4, "syllable": "or" },
+      { "pitch": "bb", "octave": 3, "syllable": "treat" },
+      { "pitch": "db", "octave": 4, "syllable": "smell" },
+      { "pitch": "db", "octave": 4, "syllable": "my" },
+      { "pitch": "bb", "octave": 3, "syllable": "feet" },
+      { "pitch": "db", "octave": 4, "syllable": "give" },
+      { "pitch": "db", "octave": 4, "syllable": "me" },
+      { "pitch": "bb", "octave": 3, "syllable": "some" },
+      { "pitch": "eb", "octave": 4, "syllable": "thing" },
+      { "pitch": "db", "octave": 4, "syllable": "good" },
+      { "pitch": "db", "octave": 4, "syllable": "to" },
+      { "pitch": "bb", "octave": 3, "syllable": "eat" },
+      { "pitch": "db", "octave": 4, "syllable": "if" },
+      { "pitch": "db", "octave": 4, "syllable": "you" },
+      { "pitch": "bb", "octave": 3, "syllable": "don't" },
+      { "pitch": "db", "octave": 4, "syllable": "I" },
+      { "pitch": "db", "octave": 4, "syllable": "don't" },
+      { "pitch": "bb", "octave": 3, "syllable": "care" }
     ]
   }
 ]
