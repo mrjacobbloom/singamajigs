@@ -39,5 +39,5 @@ clear videos of each Sing-a-ma-jig's song.
 
 The Sing-a-ma-jigs&trade; are the property of Fisher-Price and I've done my best
 not to infringe on their rights in this project. I believe all of the songs
-they perform are in the Public Domain but if I've posted something I shouldn't
-have, please let me know so I can remove it.
+they perform are in the Public Domain (I skipped the ones that aren't) but if I've
+posted something I shouldn't have, please let me know so I can remove it.

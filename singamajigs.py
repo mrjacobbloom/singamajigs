@@ -1,5 +1,8 @@
 import json
 import random
+import midi
+import math
+import random
 
 class _NoteInstance:
     def __init__(self, songIndex, noteIndex, noteObj):
@@ -14,41 +17,43 @@ class _Globals:
     COSTS = {
         'SAME': 0, # same jig plays multiple notes in a row
         'DIFF': 1, # different jig already in set plays the next note
-        'ADD':  6, # add a new jig to the set
-        'OCT':  2  # extra cost incurred if the note is in the wrong octave
-    }
-    
-    SHARPS = {
-        'c#': 'db',
-        'd#': 'eb',
-        'e#': 'f', # trust no one
-        'f#': 'gb',
-        'g#': 'ab',
-        'a#': 'bb',
-        'b#': 'c'
+        'ADD':  10, # add a new jig to the set
+        'OCT':  4  # extra cost incurred if the note is in the wrong octave
     }
     
     def sort(self, poss):
         return poss.cost
+    
+    noteNames = ['c', 'db', 'd', 'eb', 'e', 'f', 'gb', 'g', 'ab', 'a', 'bb', 'b']
+    # adapted from https://github.com/danigb/tonal/blob/master/packages/note/index.js#L328
+    def midiToNote(self, midiNote):
+        return (self.noteNames[midiNote % 12], math.floor(midiNote / 12) - 1)
 
-    BEAM_WIDTH = 10 # number of best possibilities to keep each round
+    BEAM_WIDTH = 80 # number of best possibilities to keep each round
     singamajig_data = json.load(open('singamajig_data.json'))
     # database of all the notes in all the songs, categorized by note name
-    songs_by_note = {}
+    songs_by_note = {'spoken': []}
+    for noteName in noteNames:
+        songs_by_note[noteName] = []
     for songIndex in xrange(0, len(singamajig_data)):
         notes = singamajig_data[songIndex]['notes']
         for noteIndex in xrange(0, len(notes)):
             noteObj = notes[noteIndex]
             note = noteObj['pitch']
-            if not note in songs_by_note:
-                songs_by_note[note] = []
             songs_by_note[note].append(_NoteInstance(songIndex, noteIndex, noteObj))
+    
+    allSingamajigs = []
+    def initJigs(self):
+        # instantiate one Singamajig object per Singamajig model
+        # (since they don't track their own state it's fine lol)
+        for songIndex in xrange(0, len(self.singamajig_data)):
+            self.allSingamajigs.append(_Singamajig(songIndex))
 
 class _Singamajig:
-    _globals = _Globals()
+    globals = _Globals()
     def __init__(self, songIndex):
         self.songIndex = songIndex
-        self.songData = self._globals.singamajig_data[songIndex]
+        self.songData = self.globals.singamajig_data[songIndex]
         self.notes = self.songData['notes']
     
     def getNextIndex(self, prevIndex):
@@ -57,14 +62,15 @@ class _Singamajig:
     def getNote(self, noteNum):
         noteNum = noteNum % len(self.notes)
         return self.notes[noteNum]
+_Globals().initJigs();
 
 class _ScoreState:
-    _globals = _Globals()
+    globals = _Globals()
     def __init__(self, singamajigIndex, songIndex, noteIndex):
         self.singamajigIndex = singamajigIndex
         self.songIndex = songIndex
         self.noteIndex = noteIndex
-        self.song = self._globals.singamajig_data[self.songIndex]
+        self.song = self.globals.singamajig_data[self.songIndex]
         self.noteObj = self.song['notes'][self.noteIndex]
     def __str__(self):
         return "\"%s\" [id %d] - %d:%s%d \"%s\"" % (
@@ -90,7 +96,7 @@ class _State:
         )
 
 class _Possibility:
-    _globals = _Globals()
+    globals = _Globals()
     # store a reference to the previous possibility instead of duplicating everything?
     
     cost = 0 # cost of previous possibility plus next possibility
@@ -100,19 +106,23 @@ class _Possibility:
     def __init__(self):
         self.states = [] # a list of _State objects
     
-    def add(self, jig, noteIndex):
+    def add(self, jig, noteIndex, octave):
         self.currentJig = len(self.states)
         self.states.append(_State(jig, len(self.states), noteIndex))
-        self.cost += self._globals.COSTS['ADD']
+        self.cost += self.globals.COSTS['ADD']
+        if jig.getNote(noteIndex)['octave'] != octave:
+            self.cost += self.globals.COSTS['OCT']
     
-    def advance(self, jigIndex):
+    def advance(self, jigIndex, octave):
         state = self.states[jigIndex]
         state.noteIndex = state.singamajig.getNextIndex(state.noteIndex)
         if jigIndex == self.currentJig:
-            self.cost += self._globals.COSTS['SAME']
+            self.cost += self.globals.COSTS['SAME']
         else:
-            self.cost += self._globals.COSTS['DIFF']
+            self.cost += self.globals.COSTS['DIFF']
             self.currentJig = jigIndex
+        if state.singamajig.getNote(state.noteIndex)['octave'] != octave:
+            self.cost += self.globals.COSTS['OCT']
     
     def getAdvanceableJigIndexes(self, note):
         matchingJigs = []
@@ -142,48 +152,63 @@ class _Possibility:
         else:
             return None
 
-def singamajigs(melody):
-    _globals = _Globals()
-    prevPossibilities = [_Possibility()]
+def get_possibilities(prevPossibilities, midiNote, isOn):
+    globals = _Globals()
+    possibilities = [] # possibilities for the current round
+    maxCost = -1;
+    costsThisRound = 0;
+    (melody_pitch, melody_octave) = globals.midiToNote(midiNote)
     
-    # instantiate one SIngamajig object per song
-    # (since they don't track their own state it's fine lol)
-    allSingamajigs = []
-    for songIndex in xrange(0, len(_globals.singamajig_data)):
-        allSingamajigs.append(_Singamajig(songIndex))
-    
-    for melody_note in melody:
-        possibilities = [] # possibilities for the current round
-        melody_note = melody_note.lower()
-        melody_pitch = melody_note[:-1]
-        melody_octave = melody_note[-1]
-        if '#' in melody_pitch and melody_pitch in _globals.SHARPS:
-            melody_pitch = _globals.SHARPS[melody_pitch]
-        
-        # catch it now if there are no singamajigs that sing the note
-        if not melody_pitch in _globals.songs_by_note:
-            return None
-        
-        for prevPoss in prevPossibilities:
-            nexts = prevPoss.getAdvanceableJigIndexes(melody_pitch)
-            for nextJig in nexts:
-                newPoss = prevPoss.copy()
-                newPoss.advance(nextJig)
+    for prevPoss in prevPossibilities:
+        nexts = prevPoss.getAdvanceableJigIndexes(melody_pitch)
+        for nextJig in nexts:
+            newPoss = prevPoss.copy()
+            newPoss.advance(nextJig, melody_octave)
+            if costsThisRound < globals.BEAM_WIDTH:
                 possibilities.append(newPoss)
-            for noteInstance in _globals.songs_by_note[melody_pitch]:
-                newPoss = prevPoss.copy()
-                jig = allSingamajigs[noteInstance.songIndex]
-                newPoss.add(jig, noteInstance.noteIndex)
+                if newPoss.cost > maxCost:
+                    maxCost = newPoss.cost
+                    costsThisRound += 1
+            elif newPoss.cost <= maxCost:
+                possibilities.append(newPoss)
+        for noteInstance in globals.songs_by_note[melody_pitch]:
+            newPoss = prevPoss.copy()
+            jig = globals.allSingamajigs[noteInstance.songIndex]
+            newPoss.add(jig, noteInstance.noteIndex, melody_octave)
+            if costsThisRound < globals.BEAM_WIDTH:
+                possibilities.append(newPoss)
+                if newPoss.cost > maxCost:
+                    maxCost = newPoss.cost
+                    costsThisRound += 1
+            elif newPoss.cost <= maxCost:
                 possibilities.append(newPoss)
         
         # ok now it's beam time
         # select the cheapest possibilities before moving on to the next round
-        possibilities.sort(key=_globals.sort)
-        prevPossibilities = possibilities[:_globals.BEAM_WIDTH]
-    if(len(prevPossibilities) == 0):
+        random.shuffle(possibilities)
+        possibilities.sort(key=globals.sort)
+        return possibilities[:globals.BEAM_WIDTH]
+
+def midi_to_score(filename):
+    pattern = midi.read_midifile(filename)
+    track = pattern[0] # @todo: support multiple tracks
+    possibilities = [_Possibility()]
+    for event in track:
+        midiNote = event.data[0] if len(event.data) else None
+        if isinstance(event, midi.NoteOnEvent):
+            if event.data[1] > 0:
+                possibilities = get_possibilities(possibilities, midiNote, True)
+            else:
+                None
+                #possibilities = get_possibilities(possibilities, midiNote, False)
+        elif isinstance(event, midi.NoteOffEvent):
+            None
+            #possibilities = get_possibilities(possibilities, midiNote, False)
+    
+    if(len(possibilities) == 0):
         return None
     
-    currentPossibility = prevPossibilities[0]
+    currentPossibility = possibilities[0]
     # reconstruct the possibility into a consumable format
     score = []
     while not currentPossibility == None:
@@ -191,4 +216,4 @@ def singamajigs(melody):
         if not scoreState == None:
             score.insert(0, str(scoreState))
         currentPossibility = currentPossibility.previousPoss
-    return score
+    return (score, possibilities[0].cost)
