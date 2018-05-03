@@ -192,28 +192,31 @@ def get_possibilities(prevPossibilities, midiNote, isOn):
 def midi_to_score(filename):
     pattern = midi.read_midifile(filename)
     track = pattern[0] # @todo: support multiple tracks
-    possibilities = [_Possibility()]
-    for event in track:
-        midiNote = event.data[0] if len(event.data) else None
-        if isinstance(event, midi.NoteOnEvent):
-            if event.data[1] > 0:
-                possibilities = get_possibilities(possibilities, midiNote, True)
-            else:
+    cheapestKeyPossibility = None
+    # try 24 keys (well, every key in the surrounding 2 octaves)
+    for keyOffset in xrange(-12, 12):
+        possibilities = [_Possibility()]
+        for event in track:
+            midiNote = (event.data[0] + keyOffset) if len(event.data) else None
+            if isinstance(event, midi.NoteOnEvent):
+                if event.data[1] > 0:
+                    possibilities = get_possibilities(possibilities, midiNote, True)
+                else:
+                    None
+                    #possibilities = get_possibilities(possibilities, midiNote, False)
+            elif isinstance(event, midi.NoteOffEvent):
                 None
                 #possibilities = get_possibilities(possibilities, midiNote, False)
-        elif isinstance(event, midi.NoteOffEvent):
-            None
-            #possibilities = get_possibilities(possibilities, midiNote, False)
     
-    if(len(possibilities) == 0):
-        return None
+        if len(possibilities) > 0 and (cheapestKeyPossibility == None or possibilities[0].cost < cheapestKeyPossibility.cost):
+            cheapestKeyPossibility = possibilities[0]
     
-    currentPossibility = possibilities[0]
     # reconstruct the possibility into a consumable format
+    currentPossibility = cheapestKeyPossibility
     score = []
     while not currentPossibility == None:
         scoreState = currentPossibility.getScoreState()
         if not scoreState == None:
             score.insert(0, str(scoreState))
         currentPossibility = currentPossibility.previousPoss
-    return (score, possibilities[0].cost)
+    return (score, {'cost': cheapestKeyPossibility.cost, 'jigs': len(cheapestKeyPossibility.states)})
