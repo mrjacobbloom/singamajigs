@@ -2,6 +2,7 @@
   {
     "title": "When The Saints Go Marching In",
     "skins": ["Teal"],
+    "url": "https://www.youtube.com/watch?v=phtcHm7bkz0",
     "notes": [
       { "pitch": "g", "octave": 3, "syllable": "oh" },
       { "pitch": "b", "octave": 3, "syllable": "when" },
@@ -40,6 +41,7 @@
   {
     "title": "We Wish You a Merry Christmas",
     "skins": ["Reindeer"],
+    "url": "https://www.youtube.com/watch?v=E9p07uG1z2s",
     "notes": [
       { "pitch": "b", "octave": 3, "syllable": "we" },
       { "pitch": "e", "octave": 4, "syllable": "wish" },
@@ -77,6 +79,7 @@
   {
     "title": "Trick or Treat (Ab)",
     "skins": ["Orange Pumpkin", "White Ghost"],
+    "url": "https://www.youtube.com/watch?v=JGuEfxTFhME",
     "notes": [
       { "pitch": "db", "octave": 4, "syllable": "trick" },
       { "pitch": "db", "octave": 4, "syllable": "or" },
@@ -103,6 +106,7 @@
   {
     "title": "Trick or Treat (G)",
     "skins": ["Skeleton"],
+    "url": "https://www.youtube.com/watch?v=RAnqmQbJLn8",
     "notes": [
       { "pitch": "d", "octave": 2, "syllable": "trick" },
       { "pitch": "d", "octave": 2, "syllable": "or" },
@@ -129,6 +133,7 @@
   {
     "title": "Trick or Treat (E)",
     "skins": ["Purple Witch"],
+    "url": "https://www.youtube.com/watch?v=Yac0lrL2DHs",
     "notes": [
       { "pitch": "b", "octave": 4, "syllable": "trick" },
       { "pitch": "b", "octave": 4, "syllable": "or" },
@@ -155,6 +160,7 @@
   {
     "title": "Sailing, Sailing",
     "skins": ["Pink Mermaid"],
+    "url": "https://www.youtube.com/watch?v=awmWtBkFD1c",
     "notes": [
       { "pitch": "gb", "octave": 4, "syllable": "sail" },
       { "pitch": "b", "octave": 4, "syllable": "ing" },
@@ -186,6 +192,7 @@
   {
     "title": "Here Comes Peter Cottontail",
     "skins": ["White Easter Rabbit"],
+    "url": "https://www.youtube.com/watch?v=SPiDURBJEpE",
     "notes": [
       { "pitch": "g", "octave": 3, "syllable": "here" },
       { "pitch": "bb", "octave": 3, "syllable": "comes" },
@@ -217,6 +224,7 @@
   {
     "title": "On Top of Old Smokey",
     "skins": ["Orange"],
+    "url": "https://www.youtube.com/watch?v=PjIHSljbUbM",
     "notes": [
       { "pitch": "a", "octave": 3, "syllable": "on" },
       { "pitch": "a", "octave": 3, "syllable": "top" },
@@ -245,6 +253,7 @@
   {
     "title": "Where, Oh Where Has My Little Dog Gone?",
     "skins": ["Red"],
+    "url": "https://www.youtube.com/watch?v=29i9YQQWZtc",
     "notes": [
       { "pitch": "db", "octave": 5, "syllable": "oh" },
       { "pitch": "e", "octave": 5, "syllable": "where" },
@@ -285,6 +294,7 @@
   {
     "title": "Oh My Darling, Clementine",
     "skins": ["Dark Purple"],
+    "url": "https://www.youtube.com/watch?v=lDgSLJ8E2fU",
     "notes": [
       { "pitch": "d", "octave": 5, "syllable": "oh" },
       { "pitch": "d", "octave": 5, "syllable": "my" },
@@ -319,6 +329,7 @@
   {
     "title": "Jingle Bells (Ab)",
     "skins": ["Snowman"],
+    "url": "https://www.youtube.com/watch?v=_wyIrNOS630",
     "notes": [
       { "pitch": "db", "octave": 4, "syllable": "jin" },
       { "pitch": "db", "octave": 4, "syllable": "gle" },
@@ -351,6 +362,7 @@
   {
     "title": "Jingle Bells (C)",
     "skins": ["Santa Claus"],
+    "url": "https://www.youtube.com/watch?v=rZhA31WMUMk",
     "notes": [
       { "pitch": "e", "octave": 4, "syllable": "jin" },
       { "pitch": "e", "octave": 4, "syllable": "gle" },
@@ -383,6 +395,7 @@
   {
     "title": "It's Raining, It's Pouring",
     "skins": ["Mint Green"],
+    "url": "https://www.youtube.com/watch?v=UwvMXPQipuQ",
     "notes": [
       { "pitch": "f", "octave": 3, "syllable": "it's" },
       { "pitch": "ab", "octave": 3, "syllable": "rain" },
@@ -417,7 +430,8 @@
   },
   {
     "title": "Happy Birthday (F#)",
-    "skins": ["Mint Green"],
+    "skins": ["Blue"],
+    "url": "https://www.youtube.com/watch?v=GN6qi6Gi1nc",
     "notes": [
       { "pitch": "db", "octave": 5, "syllable": "hap" },
       { "pitch": "db", "octave": 5, "syllable": "py" },
@@ -450,6 +464,7 @@
   {
     "title": "Happy Birthday (D)",
     "skins": ["Pink"],
+    "url": "https://www.youtube.com/watch?v=CP3MzPetAUM",
     "notes": [
       { "pitch": "a", "octave": 5, "syllable": "hap" },
       { "pitch": "a", "octave": 5, "syllable": "py" },
@@ -482,6 +497,7 @@
   {
     "title": "For He's a Jolly Good Fellow",
     "skins": ["Light Blue"],
+    "url": "https://www.youtube.com/watch?v=hP2njEbsMHk",
     "notes": [
       { "pitch": "g", "octave": 4, "syllable": "for" },
       { "pitch": "a", "octave": 4, "syllable": "he's" },
@@ -512,6 +528,7 @@
   {
     "title": "A Tisket A Tasket",
     "skins": ["Hot Pink"],
+    "url": "https://www.youtube.com/watch?v=ObOjBZeCjZ4",
     "notes": [
       { "pitch": "ab", "octave": 4, "syllable": "a" },
       { "pitch": "b", "octave": 4, "syllable": "tis" },
@@ -546,6 +563,7 @@
   {
     "title": "Yankee Doodle",
     "skins": ["Red"],
+    "url": "https://www.youtube.com/watch?v=jBHK3FCYHxs",
     "notes": [
       { "pitch": "c", "octave": 4, "syllable": "Yan" },
       { "pitch": "c", "octave": 4, "syllable": "kee" },
@@ -580,6 +598,7 @@
   {
     "title": "This Little Light of Mine",
     "skins": ["Yellow"],
+    "url": "https://www.youtube.com/watch?v=JUilxjVj2ds",
     "notes": [
       { "pitch": "g", "octave": 4, "syllable": "this" },
       { "pitch": "g", "octave": 4, "syllable": "lit" },
@@ -631,6 +650,7 @@
   {
     "title": "The Star-Spangled Banner",
     "skins": ["Red, White, and Blue"],
+    "url": "https://www.youtube.com/watch?v=t8m3rBBS5mA",
     "notes": [
       { "pitch": "b", "octave": 3, "syllable": "oh" },
       { "pitch": "ab", "octave": 3, "syllable": "oh" },
@@ -741,6 +761,7 @@
   {
     "title": "Skinnamarink",
     "skins": ["Blue"],
+    "url": "https://www.youtube.com/watch?v=sz3cq2J6Z7U",
     "notes": [
       { "pitch": "g", "octave": 4, "syllable": "skin" },
       { "pitch": "bb", "octave": 4, "syllable": "na" },
@@ -776,6 +797,7 @@
   {
     "title": "She'll Be Coming 'Round the Mountain",
     "skins": ["Yellow"],
+    "url": "https://www.youtube.com/watch?v=-Eowu7ND-tM",
     "notes": [
       { "pitch": "b", "octave": 2, "syllable": "she'll" },
       { "pitch": "db", "octave": 3, "syllable": "be" },
@@ -831,6 +853,7 @@
   {
     "title": "Oh Susanna",
     "skins": ["Purple"],
+    "url": "https://www.youtube.com/watch?v=i-qqCrohQrA",
     "notes": [
       { "pitch": "b", "octave": 4, "syllable": "oh" },
       { "pitch": "b", "octave": 4, "syllable": "Su" },
@@ -860,6 +883,7 @@
   {
     "title": "Let Me Call You Sweetheart",
     "skins": ["Red"],
+    "url": "https://www.youtube.com/watch?v=TxRJE3B47R4",
     "notes": [
       { "pitch": "db", "octave": 4, "syllable": "let" },
       { "pitch": "e", "octave": 4, "syllable": "me" },

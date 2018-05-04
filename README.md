@@ -8,10 +8,8 @@ fixed number of the most promising solutions, which makes it partially resilient
 to local maxima but won't take up a ludicrous amount of memory either.
 
 ```shell
-python driver.py
+python3 driver.py
 ```
-
-Note it's in Python 2.7 'cause that's what was installed on my computer.
 
 ## What does this all even mean?
 The Sing-a-ma-jigs were a line of singing toys. Each model had one public-domain
@@ -24,6 +22,10 @@ constraints, while optimizing to maximize the number of consecutive notes played
 by one Sing-a-ma-jig (bell) and then minimize the number of Sing-a-ma-jigs
 needed.
 
+It also tries transposing the song up and down 12 keys to see if it can find a
+better match. It uses a little randomization to spice things up, so I make no
+promise of determinism.
+
 ## Why?
 Because they're obnoxious. Also because I saw videos like
 [this one](https://www.youtube.com/watch?v=P1a554_J9VU) and thought to myself
@@ -32,10 +34,33 @@ doll makes, and I should make it easy for future generations to do this." And
 because it's an interesting coding exercise and I need to get more comfortable
 in Python.
 
+## Installation
+Pardon me while I figure out how dependency management works in the Python
+universe. Here are the things you need to figure out how to install:
+
+- [python3-midi](https://github.com/louisabraham/python3-midi)
+  - the setup file for this required a package called "six" that I had to install
+    separately 🤷‍
+- [pytube](https://github.com/nficano/pytube)
+
+## Usage
+```python
+import singamajigs
+
+# download all the videos (if you want them in the visualization)
+# you only need to run this once!
+singamajigs.download_all()
+
+# generate a score object from a MIDI file
+score = singamajigs.midi_to_score("path/to/file/myIncredibleSong.mid")
+```
+
 ## Credits
 A big thanks to the YouTube channel
 [SuperSingamajigs](https://www.youtube.com/user/SuperSingamajigs) for posting
-clear videos of each Sing-a-ma-jig's song.
+clear videos of each Sing-a-ma-jig's song. This project downloads their videos
+for the visualizer, but the video files themselves are not distributed with this
+repo.
 
 The Sing-a-ma-jigs&trade; are the property of Fisher-Price and I've done my best
 not to infringe on their rights in this project. I believe all of the songs

@@ -1,8 +1,10 @@
+import os
 import json
 import random
 import midi
 import math
 import random
+from pytube import YouTube
 
 class _NoteInstance:
     def __init__(self, songIndex, noteIndex, noteObj):
@@ -35,9 +37,9 @@ class _Globals:
     songs_by_note = {'spoken': []}
     for noteName in noteNames:
         songs_by_note[noteName] = []
-    for songIndex in xrange(0, len(singamajig_data)):
+    for songIndex in range(0, len(singamajig_data)):
         notes = singamajig_data[songIndex]['notes']
-        for noteIndex in xrange(0, len(notes)):
+        for noteIndex in range(0, len(notes)):
             noteObj = notes[noteIndex]
             note = noteObj['pitch']
             songs_by_note[note].append(_NoteInstance(songIndex, noteIndex, noteObj))
@@ -46,7 +48,7 @@ class _Globals:
     def initJigs(self):
         # instantiate one Singamajig object per Singamajig model
         # (since they don't track their own state it's fine lol)
-        for songIndex in xrange(0, len(self.singamajig_data)):
+        for songIndex in range(0, len(self.singamajig_data)):
             self.allSingamajigs.append(_Singamajig(songIndex))
 
 class _Singamajig:
@@ -189,12 +191,29 @@ def get_possibilities(prevPossibilities, midiNote, isOn):
         possibilities.sort(key=globals.sort)
         return possibilities[:globals.BEAM_WIDTH]
 
+def download_all():
+    globals = _Globals()
+    if os.path.exists('./video'):
+        print('Aborting video download, video directory already exists.')
+        return
+    os.makedirs('./video')
+    for songNumber in range(0,len(globals.singamajig_data)):
+        song = globals.singamajig_data[songNumber]
+        print('Downloading "%s"...' % (song['title']))
+        yt = YouTube(song['url'])
+        yt.streams \
+        .filter(progressive=True, file_extension='mp4') \
+        .order_by('resolution') \
+        .asc() \
+        .first() \
+        .download(output_path = './video', filename = str(songNumber))
+
 def midi_to_score(filename):
     pattern = midi.read_midifile(filename)
     track = pattern[0] # @todo: support multiple tracks
     cheapestKeyPossibility = None
     # try 24 keys (well, every key in the surrounding 2 octaves)
-    for keyOffset in xrange(-12, 12):
+    for keyOffset in range(-12, 12):
         possibilities = [_Possibility()]
         for event in track:
             midiNote = (event.data[0] + keyOffset) if len(event.data) else None
