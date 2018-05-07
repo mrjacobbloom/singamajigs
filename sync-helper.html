@@ -1,0 +1,87 @@
+<html>
+<head>
+  
+</head>
+<body>
+  <input id="input" value="0" type="number"/><br/>
+  <video controls id="vid"></video>
+  <div style="float: right; width: 500px;">
+    <button type="button" id="now">Add now [m]</button>
+    <button type="button" id="convert">Convert</button>
+    <pre id="pre" style="word-break: break-all; white-space: pre-wrap;"></pre>
+    <textarea id="textarea" style="width: 100%; min-height: 400px;"></textarea>
+  </div>
+  
+  <script>
+    const input = document.querySelector('#input');
+    const vid = document.querySelector('#vid');
+    const pre = document.querySelector('#pre');
+    const now = document.querySelector('#now');
+    const convert = document.querySelector('#convert');
+    const textarea = document.querySelector('#textarea');
+    var arr;
+    function updatePre() {
+      pre.innerText = JSON.stringify(arr)
+    }
+    function loadVideo() {
+      arr = [];
+      updatePre();
+      vid.src = `./video/${input.value}.mp4`;
+      vid.addEventListener('canplay', () => {
+        vid.playbackRate = 0.5;
+      }, {once: true})
+    }
+    loadVideo();
+    input.addEventListener('input', loadVideo);
+    
+    function addNow() {
+      arr.push(vid.currentTime);
+      updatePre();
+    }
+    now.addEventListener('click', addNow);
+    
+    const scrub = 0.3;
+    
+    document.body.addEventListener('keyup', e => {
+      switch(e.code) {
+        case 'ArrowLeft': {
+          vid.currentTime -= scrub;
+          break;
+        }
+        case 'ArrowRight': {
+          vid.currentTime += scrub;
+          break;
+        }
+        case 'Space': {
+          vid.play()
+          setTimeout(() => vid.pause(), 100);
+          break;
+        }
+        case 'KeyM': {
+          addNow();
+          break;
+        }
+        case 'Backspace': {
+          arr.pop();
+          updatePre();
+          break;
+        }
+        default: console.log(e.code)
+      }
+    });
+    
+    convert.addEventListener('click', () => {
+      val = textarea.value
+      for(let time of arr) {
+        val = val.replace(/" }/, `", "start": ${time.toFixed(2)} }`);
+      }
+      textarea.value = val;
+      textarea.focus();
+      textarea.select();
+      document.execCommand('copy');
+      pre.innerText = 'Copied to clipboard.';
+      textarea.value = '';
+    })
+  </script>
+</body>
+</html>
