@@ -1,5 +1,6 @@
 recordings/
 video/
+renders/
 .DS_Store
 *.pyc
 __pycache__/
