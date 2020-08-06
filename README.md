@@ -42,6 +42,8 @@ universe. Here are the things you need to figure out how to install:
   - the setup file for this required a package called "six" that I had to install
     separately 🤷‍
 - [pytube](https://github.com/nficano/pytube)
+- [abjad](http://projectabjad.org/)
+- [Imagemajick](http://www.imagemagick.org/script/index.php)
 
 ## Usage
 ```python

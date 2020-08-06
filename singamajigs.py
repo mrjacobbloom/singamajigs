@@ -6,6 +6,7 @@ import math
 import random
 import pytube
 import abjad
+import pygame
 
 class _NoteInstance:
     def __init__(self, songIndex, noteIndex, noteObj):
@@ -232,6 +233,17 @@ def download_all():
         .first() \
         .download(output_path = './video', filename = str(songNumber))
 
+def to_audio():
+    if os.path.exists('./audio'):
+        print('Aborting audio conversion, audio directory already exists.')
+        return
+    os.makedirs('./audio')
+    for vfile in os.listdir('./video'):
+        vfile = './video/' + vfile
+        afile = vfile.replace('video', 'audio').replace('mp4', 'mp3')
+        print('Converting %s to %s.' % (vfile, afile))
+        os.system('ffmpeg -i %s %s' % (vfile, afile))
+
 def midi_to_sscore(filename, try_alt_keys = True):
     pattern = midi.read_midifile(filename)
     track = pattern[0] # @todo: support multiple tracks
@@ -361,7 +373,7 @@ def sscore_to_abjad_score(sscore):
             # eh that's a risk I'm willing to take
             
             voiceTuple = voices[state.singamajigIndex]
-            voiceTuple[0][beat] = measure
+            voiceTuple[0][math.floor(beat)] = measure
             voiceTuple[1].add_lyric(snote['syllable'])
             
             nextState += 1
@@ -370,7 +382,7 @@ def sscore_to_abjad_score(sscore):
     
     return score
 
-def render_score(score, beats, jigs):
+def render_score(score, beats, jigs, show = False):
     # adapted from https://github.com/Abjad/abjad/blob/5c7f5f7abd8013f99b60c9ceb3a91c771abbca7c/abjad/demos/ligeti/make_desordre_lilypond_file.py
     file = abjad.LilyPondFile.new(score, global_staff_size = 18)
     
@@ -395,6 +407,48 @@ def render_score(score, beats, jigs):
     file.paper_block.bottom_margin = 0
     file.paper_block.left_margin = 0
     vector = abjad.SpacingVector(0, 0, 15, 0)
-    #file.paper_block.system_system_spacing = vector
-    abjad.show(file)
-    #print(abjad.persist(staff).as_png('./renders/score.png', remove_ly=True))
+    if show:
+        print('Displaying score as PDF.')
+        abjad.show(file)
+    else:
+        file.paper_block.system_system_spacing = vector
+        filename = './renders/score.png'
+        print(abjad.persist(file).as_png(filename, remove_ly=True))
+        print('Cropping %s as ./renders/cropped.png.' % (filename))
+        os.system('convert renders/score.png -trim renders/cropped.png')
+
+def visualize(sscore):
+    
+    FPS = 24
+
+    pygame.init()
+    pygame.mixer.init()
+    clock = pygame.time.Clock()
+    
+    va = []
+    for i in range(0, sscore['jigs']):
+        movie = pygame.movie.Movie('./video/%d.mp4' % (i))
+        movie_screen = pygame.Surface(movie.get_size()).convert()
+        movie.set_display(movie_screen)
+        audio = './audio/%d.mp3' % (i)
+        va.append((movie, movie_screen, audio))
+    
+    #pygame.mixer.music.load(audio)
+    #pygame.mixer.music.play()
+    
+    screen = pygame.display.set_mode(movie.get_size())
+    movie.play()
+
+
+    playing = True
+    while playing:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                movie.stop()
+                playing = False
+
+        screen.blit(movie_screen,(0,0))
+        pygame.display.update()
+        clock.tick(FPS)
+
+    pygame.quit()
